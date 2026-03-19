@@ -2,30 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Universo Contigo · Edición Estelar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Universo Táctil · Carta de amor</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             overflow: hidden; 
-            background-color: #020205;  
+            background-color: #020205; 
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             color: #fff;
+            touch-action: none; /* Evita scroll mientras se interactúa con el canvas */
         }
         #webgl-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
 
-        /* Pantalla de inicio con gradiente más suave */
+        /* Pantalla de inicio */
         #start-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at 30% 40%, #251d2e, #020205 80%);
             z-index: 50;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1.5s ease;
+            transition: opacity 1.2s ease;
+            padding: 20px;
         }
         #start-screen h1 { 
-            font-size: clamp(2.5rem, 10vw, 5rem); 
+            font-size: clamp(2rem, 12vw, 5rem); 
             margin-bottom: 30px; 
-            letter-spacing: 12px;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             font-weight: 200;
             text-align: center;
@@ -36,138 +38,143 @@
         }
         
         .btn {
-            background: transparent; 
-            border: 1.5px solid rgba(255, 240, 250, 0.6);
+            background: rgba(255,255,255,0.1); 
+            border: 1.5px solid rgba(255, 240, 250, 0.7);
             color: white; 
-            padding: 16px 48px; 
-            font-size: 1.1rem; 
-            border-radius: 40px;
+            padding: 16px 40px; 
+            font-size: 1.2rem; 
+            border-radius: 60px;
             cursor: pointer; 
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             letter-spacing: 4px; 
             text-transform: uppercase;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 20px rgba(255,255,240,0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255,255,240,0.3);
+            min-width: 250px;
+            max-width: 90%;
         }
         .btn:hover { 
             background: rgba(255, 255, 255, 0.9); 
             color: #1a0b1a; 
-            box-shadow: 0 0 40px #f0e6ff;
-            border-color: white;
+            box-shadow: 0 0 50px #f0e6ff;
         }
 
-        /* Modal glassmorphism refinado */
+        /* Modal táctil mejorado */
         #content-modal {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
-            width: 90%; max-width: 620px;
-            background: rgba(8, 5, 15, 0.6);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 200, 230, 0.2);
-            border-radius: 24px;
-            padding: 30px 30px 35px;
+            width: 92%; 
+            max-width: 650px;
+            background: rgba(12, 8, 18, 0.75);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border: 1px solid rgba(255, 200, 230, 0.25);
+            border-radius: 36px;
+            padding: 28px 22px 32px;
             z-index: 20;
             opacity: 0; pointer-events: none;
             transition: all 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05) inset;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1) inset;
+            max-height: 85vh;
+            overflow-y: auto; /* por si el contenido es muy largo */
         }
         #content-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         
         #modal-title { 
-            font-size: 2.2rem; 
-            margin-bottom: 15px; 
+            font-size: 1.9rem; 
+            margin-bottom: 12px; 
             font-weight: 300; 
             letter-spacing: 1.5px; 
-            border-bottom: 1px solid rgba(255,255,255,0.15); 
-            padding-bottom: 15px; 
-            color: #ffe2f0;
-            text-shadow: 0 0 15px magenta;
+            border-bottom: 1px solid rgba(255,255,255,0.2); 
+            padding-bottom: 12px; 
+            color: #ffe6f0;
+            text-shadow: 0 0 20px #ff80b0;
             font-family: 'Georgia', serif;
+            word-break: break-word;
         }
         
         .carousel-container { 
             position: relative; 
             width: 100%; 
-            height: 280px; 
+            height: auto; 
+            aspect-ratio: 16/9;
+            max-height: 250px;
             overflow: hidden; 
-            margin-bottom: 20px; 
-            border-radius: 20px; 
-            background: #000; 
-            box-shadow: 0 0 30px rgba(0,0,0,0.6);
+            margin-bottom: 15px; 
+            border-radius: 24px; 
+            background: #0a0a12; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
         #carousel-image { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            transition: opacity 0.6s ease; 
-            border-radius: 20px;
+            transition: opacity 0.5s ease; 
+            border-radius: 24px;
         }
         
         #modal-text { 
             font-size: 1.1rem; 
-            line-height: 1.7; 
-            color: #f0e0f0; 
+            line-height: 1.6; 
+            color: #f0daf0; 
             font-weight: 300; 
-            margin-bottom: 30px; 
-            padding: 0 10px;
+            margin-bottom: 20px; 
+            padding: 0 5px;
             font-style: italic;
             text-align: center;
+            min-height: 70px;
         }
 
         .controls { 
             display: flex; 
-            justify-content: space-between; 
+            justify-content: center; 
             gap: 12px; 
             flex-wrap: wrap;
         }
         .nav-btn, .close-btn {
-            background: rgba(20, 10, 25, 0.7); 
-            border: 1px solid rgba(255, 180, 210, 0.3);
+            background: rgba(30, 15, 30, 0.8); 
+            border: 1px solid rgba(255, 180, 210, 0.5);
             color: white; 
-            padding: 12px 25px; 
-            font-size: 0.9rem; 
+            padding: 14px 18px; 
+            font-size: 1rem; 
             cursor: pointer; 
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-transform: uppercase; 
-            letter-spacing: 2px;
-            border-radius: 40px;
+            letter-spacing: 1.5px;
+            border-radius: 60px;
             backdrop-filter: blur(5px);
-            flex: 1;
-            min-width: 110px;
+            flex: 1 1 120px;
+            min-width: 120px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-        .nav-btn:hover { 
-            border-color: #ffb3d9; 
-            background: rgba(120, 40, 80, 0.5); 
-            box-shadow: 0 0 20px #ff99cc;
-        }
-        .close-btn { 
-            border-color: rgba(255, 140, 140, 0.5); 
-            color: #ffc0cb; 
-        }
-        .close-btn:hover { 
-            background: rgba(180, 40, 60, 0.3); 
-            border-color: #ff7373; 
-            box-shadow: 0 0 20px #ff6666;
-        }
+        .nav-btn:active, .close-btn:active { transform: scale(0.96); background: rgba(180, 70, 120, 0.7); }
+        .nav-btn:hover { border-color: #ffb3d9; background: rgba(140, 60, 100, 0.6); }
+        .close-btn { border-color: rgba(255, 120, 120, 0.7); color: #ffcdd9; }
+        .close-btn:hover { background: rgba(160, 40, 60, 0.5); border-color: #ff8a8a; }
 
         #instructions {
-            position: absolute; bottom: 30px; left: 0; width: 100%;
-            text-align: center; color: rgba(255, 255, 255, 0.4); font-size: 0.8rem; z-index: 10;
-            letter-spacing: 3px; text-transform: uppercase; pointer-events: none;
+            position: absolute; bottom: 20px; left: 0; width: 100%;
+            text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; z-index: 10;
+            letter-spacing: 2px; text-transform: uppercase; pointer-events: none;
             text-shadow: 0 0 10px black;
+            padding: 0 10px;
         }
 
         #error-message {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             text-align: center; display: none; z-index: 100; padding: 30px;
-            background: rgba(30,10,20,0.9); border: 1px solid #ff4d6d; border-radius: 30px;
-            color: white;
+            background: rgba(30,10,20,0.95); border: 1px solid #ff4d6d; border-radius: 40px;
+            color: white; width: 90%; max-width: 400px;
         }
 
+        /* Ajustes extra táctiles */
         @media (max-width: 600px) {
-            #content-modal { padding: 20px; }
-            .carousel-container { height: 180px; }
+            #content-modal { padding: 20px; border-radius: 28px; }
+            .carousel-container { max-height: 200px; }
             .controls { gap: 8px; }
+            .nav-btn, .close-btn { padding: 16px 12px; font-size: 0.9rem; min-width: 100px; }
+            #modal-title { font-size: 1.7rem; }
+            #modal-text { font-size: 1rem; }
         }
     </style>
 
@@ -182,17 +189,17 @@
 </head>
 <body>
 
-    <audio id="bg-audio" loop preload="auto">
+    <audio id="bg-audio" loop preload="auto" playsinline>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
     </audio>
 
     <div id="start-screen">
         <h1>Odisea de Amor</h1>
-        <button class="btn" id="start-btn">Iniciar Exploración</button>
+        <button class="btn" id="start-btn">Tocar para empezar</button>
     </div>
 
-    <div id="instructions">🪐 Toca un planeta · Lee los mensajes · Desliza con el mouse 🪐</div>
-    <div id="error-message">⚠️ WebGL no está disponible. Intenta con otro navegador.</div>
+    <div id="instructions">🌠 Toca un astro · Desliza para ver más 🌠</div>
+    <div id="error-message">⚠️ WebGL no está disponible. Prueba con Chrome o Safari.</div>
 
     <div id="webgl-container"></div>
 
@@ -214,9 +221,16 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        /* ----------------------------------------------------------------
-           CONFIGURACIÓN DEL SISTEMA SOLAR CON TEXTURAS MEJORADAS
-           ---------------------------------------------------------------- */
+        // ---------------------------------------------------------------
+        // 1. DETECCIÓN DE MÓVIL Y AJUSTES DE RENDIMIENTO
+        // ---------------------------------------------------------------
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const pixelRatio = isMobile ? 1 : Math.min(window.devicePixelRatio, 2);
+        const sphereSegments = isMobile ? 32 : 48; // Menos polígonos en móvil
+
+        // ---------------------------------------------------------------
+        // 2. CONFIGURACIÓN DEL SISTEMA SOLAR (con texturas de alta calidad)
+        // ---------------------------------------------------------------
         const solarSystem = [
             {
                 id: 'sun',
@@ -226,8 +240,7 @@
                 radius: 5.5,
                 distance: 0,
                 speed: 0,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg', // Reemplazar con textura solar real
-                // Usaremos textura de sol más adelante (por ahora una genérica, pero se puede cambiar)
+                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg', // placeholder
                 slides: [
                     { image: "https://images.unsplash.com/photo-1541447271487-09612b3f49f7?auto=format&fit=crop&w=800", text: "Eres el centro de mi universo. Todo lo que soy gira alrededor de tu luz." },
                     { image: "https://images.unsplash.com/photo-1541447271487-09612b3f49f7?auto=format&fit=crop&w=800", text: "Tu calor me da vida en la inmensidad del cosmos." }
@@ -240,7 +253,7 @@
                 radius: 0.9,
                 distance: 11,
                 speed: 0.02,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg', // Placeholder, idealmente textura de Mercurio
+                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
                 slides: [
                     { image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=800", text: "Tan cerca de ti que me quemo de ganas. Eres mi primer pensamiento." }
                 ]
@@ -309,7 +322,7 @@
         ];
 
         // ---------------------------------------------------------------
-        // INICIALIZACIÓN MEJORADA CON SOPORTE WEBGL
+        // 3. INICIALIZACIÓN DE LA ESCENA
         // ---------------------------------------------------------------
         let scene, camera, renderer, controls, raycaster, mouse;
         let planets = [];
@@ -317,159 +330,180 @@
         let isTransitioning = false;
         let activePlanet = null;
         let currentSlide = 0;
-        const initialCamPos = new THREE.Vector3(0, 30, 90); // Posición inicial más cercana
+        const initialCamPos = new THREE.Vector3(0, 25, 85); // mejor vista inicial
 
         function init() {
             try {
                 scene = new THREE.Scene();
-                scene.background = new THREE.Color(0x030311); // Azul muy oscuro
+                scene.background = new THREE.Color(0x030311);
 
                 camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
                 camera.position.copy(initialCamPos);
 
-                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+                renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false, powerPreference: "default" }); // antialias off en móvil
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // limitar para rendimiento
+                renderer.setPixelRatio(pixelRatio);
                 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-                renderer.toneMappingExposure = 1.2;
+                renderer.toneMappingExposure = 1.1; // más suave
                 document.getElementById('webgl-container').appendChild(renderer.domElement);
 
-                // Controles más suaves y con límites
+                // Controles adaptados a táctil
                 controls = new OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true;
-                controls.dampingFactor = 0.07;
-                controls.rotateSpeed = 0.5;
-                controls.zoomSpeed = 1.2;
+                controls.dampingFactor = 0.1;
+                controls.rotateSpeed = isMobile ? 0.7 : 0.5;
+                controls.zoomSpeed = 1.0;
                 controls.panSpeed = 0.5;
-                controls.maxDistance = 300;
-                controls.minDistance = 20;
-                controls.autoRotate = false;
-                controls.enablePan = true;
-                controls.maxPolarAngle = Math.PI / 2; // Evitar ir bajo el plano
+                controls.maxDistance = 250;
+                controls.minDistance = 18;
+                controls.enablePan = !isMobile; // en móvil a veces molesta, se puede activar si se quiere
+                controls.enableZoom = true;
+                controls.maxPolarAngle = Math.PI / 2.2; // limitar un poco
 
-                // Iluminación equilibrada (bajamos el brillo)
-                const ambient = new THREE.AmbientLight(0x404060); // Luz ambiental tenue
+                // Iluminación más suave y ambiental
+                const ambient = new THREE.AmbientLight(0x40406b); // azulado
                 scene.add(ambient);
 
-                // Luz principal del sol (más suave que antes)
-                const sunLight = new THREE.PointLight(0xffeedd, 2.5, 300);
+                const sunLight = new THREE.PointLight(0xffeedd, 2.0, 300);
                 sunLight.position.set(0, 0, 0);
                 scene.add(sunLight);
 
-                // Luz secundaria para rellenar
-                const fillLight = new THREE.DirectionalLight(0x556688, 1);
+                // luz de relleno
+                const fillLight = new THREE.DirectionalLight(0x99aacc, 0.8);
                 fillLight.position.set(1, 1, 1);
                 scene.add(fillLight);
 
-                // Nebulosa de fondo (partículas con textura)
+                // Nebulosa de fondo con partículas brillantes
                 createStarfield();
+
+                // Partículas extras (polvo estelar animado)
+                createDustParticles();
 
                 // Raycaster
                 raycaster = new THREE.Raycaster();
                 mouse = new THREE.Vector2();
 
-                // Construir planetas
                 buildPlanets();
 
-                // Eventos
+                // Eventos táctiles + mouse
                 window.addEventListener('resize', onResize);
                 window.addEventListener('click', onClick);
-                document.getElementById('start-btn').onclick = start;
-                document.getElementById('close-btn').onclick = close;
-                document.getElementById('prev-btn').onclick = () => moveSlide(-1);
-                document.getElementById('next-btn').onclick = () => moveSlide(1);
+                window.addEventListener('touchstart', onTouchStart, { passive: false });
+                document.getElementById('start-btn').addEventListener('click', start);
+                document.getElementById('close-btn').addEventListener('click', close);
+                document.getElementById('prev-btn').addEventListener('click', () => moveSlide(-1));
+                document.getElementById('next-btn').addEventListener('click', () => moveSlide(1));
 
                 animate();
             } catch (e) {
-                console.error("Error al inicializar Three.js:", e);
+                console.error("Error al inicializar:", e);
                 document.getElementById('error-message').style.display = 'block';
                 document.getElementById('start-screen').style.display = 'none';
             }
         }
 
-        // Crear fondo de estrellas con sprites brillantes
+        // ---------------------------------------------------------------
+        // 4. ELEMENTOS VISUALES (estrellas, polvo)
+        // ---------------------------------------------------------------
         function createStarfield() {
-            // Estrellas lejanas como puntos (para rendimiento)
             const starsGeo = new THREE.BufferGeometry();
-            const count = 3000;
+            const count = isMobile ? 2000 : 4000;
             const positions = new Float32Array(count * 3);
             const colors = new Float32Array(count * 3);
             for (let i = 0; i < count; i++) {
-                const r = 400 + Math.random() * 200; // radio
+                const r = 300 + Math.random() * 400;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
                 positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
                 positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
                 positions[i*3+2] = r * Math.cos(phi);
                 
-                const intensity = 0.6 + Math.random() * 0.4;
+                const intensity = 0.5 + Math.random() * 0.5;
                 colors[i*3] = intensity;
-                colors[i*3+1] = intensity * (0.8 + 0.2*Math.random());
-                colors[i*3+2] = intensity * (0.9 + 0.3*Math.random());
+                colors[i*3+1] = intensity * (0.7 + 0.3*Math.random());
+                colors[i*3+2] = intensity * (0.8 + 0.4*Math.random());
             }
             starsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             starsGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
             
-            const starMat = new THREE.PointsMaterial({ 
-                size: 1.2, 
-                vertexColors: true, 
-                transparent: true, 
-                opacity: 0.9,
-                blending: THREE.AdditiveBlending
-            });
+            const starMat = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
             const stars = new THREE.Points(starsGeo, starMat);
             scene.add(stars);
         }
 
-        // Crear planetas con texturas (aunque usemos texturas de placeholder, se ven mejor que colores planos)
+        function createDustParticles() {
+            // Partículas pequeñas alrededor del centro (polvo cósmico) con animación
+            const dustGeo = new THREE.BufferGeometry();
+            const count = 800;
+            const positions = new Float32Array(count * 3);
+            for (let i = 0; i < count; i++) {
+                const r = 20 + Math.random() * 70;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta) * 0.5; // achatado
+                positions[i*3+2] = r * Math.cos(phi);
+            }
+            dustGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const dustMat = new THREE.PointsMaterial({ color: 0xaaccff, size: 0.8, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
+            const dust = new THREE.Points(dustGeo, dustMat);
+            scene.add(dust);
+
+            // Guardar para animar rotación
+            dust.userData = { speed: 0.0005 };
+            scene.userData.dust = dust;
+        }
+
+        // ---------------------------------------------------------------
+        // 5. CONSTRUCCIÓN DE PLANETAS
+        // ---------------------------------------------------------------
         function buildPlanets() {
             const loader = new THREE.TextureLoader();
 
             solarSystem.forEach(data => {
                 const group = new THREE.Group();
                 
-                // Material con textura si es posible
-                const texture = loader.load(data.texture); // Carga la misma textura para todos (por simplicidad, pero idealmente cada planeta tiene la suya)
+                const texture = loader.load(data.texture);
                 const material = new THREE.MeshStandardMaterial({
                     map: texture,
                     color: data.color,
                     emissive: data.emissive || 0x000000,
-                    emissiveIntensity: data.id === 'sun' ? 0.8 : 0.1, // Reducido el brillo
-                    roughness: 0.5,
+                    emissiveIntensity: data.id === 'sun' ? 0.5 : 0.05, // reducido
+                    roughness: 0.6,
                     metalness: 0.1
                 });
 
-                const geo = new THREE.SphereGeometry(data.radius, 64, 64);
+                const geo = new THREE.SphereGeometry(data.radius, sphereSegments, sphereSegments);
                 const mesh = new THREE.Mesh(geo, material);
                 group.add(mesh);
 
-                // Anillos para Saturno
                 if (data.hasRings) {
-                    const ringGeo = new THREE.RingGeometry(data.radius * 1.2, data.radius * 2.0, 128);
+                    const ringGeo = new THREE.RingGeometry(data.radius * 1.2, data.radius * 2.0, 64);
                     const ringMat = new THREE.MeshStandardMaterial({
                         color: 0xc0b0a0,
                         side: THREE.DoubleSide,
                         transparent: true,
                         opacity: 0.4,
-                        emissive: 0x332211
+                        emissive: 0x221100
                     });
                     const ring = new THREE.Mesh(ringGeo, ringMat);
                     ring.rotation.x = Math.PI / 2.2;
                     ring.rotation.z = 0.3;
                     group.add(ring);
+                    // Guardar referencia para animar rotación
+                    group.userData.ring = ring;
                 }
 
-                // Posición inicial aleatoria en la órbita
                 const angle = Math.random() * Math.PI * 2;
                 group.position.set(Math.cos(angle) * data.distance, 0, Math.sin(angle) * data.distance);
                 
-                group.userData = { ...data, angle };
+                group.userData = { ...data, angle, baseY: 0 }; // para animación de flotación
                 scene.add(group);
                 planets.push(group);
-                interactables.push(mesh); // solo la esfera es cliqueable
+                interactables.push(mesh);
             });
 
-            // Añadir órbitas visuales (líneas)
+            // Órbitas visuales
             planets.forEach(p => {
                 if (p.userData.distance > 0) {
                     const points = [];
@@ -479,18 +513,34 @@
                         points.push(new THREE.Vector3(Math.cos(angle) * p.userData.distance, 0, Math.sin(angle) * p.userData.distance));
                     }
                     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                    const material = new THREE.LineBasicMaterial({ color: 0x557788, transparent: true, opacity: 0.15 });
+                    const material = new THREE.LineBasicMaterial({ color: 0x668899, transparent: true, opacity: 0.15 });
                     const orbitLine = new THREE.LineLoop(geometry, material);
                     scene.add(orbitLine);
                 }
             });
         }
 
-        // Eventos
+        // ---------------------------------------------------------------
+        // 6. MANEJADORES TÁCTILES Y DE RATÓN
+        // ---------------------------------------------------------------
         function onClick(e) {
             if (isTransitioning || activePlanet) return;
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const hits = raycaster.intersectObjects(interactables);
+            if (hits.length > 0) {
+                const planetGroup = hits[0].object.parent;
+                selectPlanet(planetGroup);
+            }
+        }
+
+        function onTouchStart(e) {
+            e.preventDefault(); // Evita scroll
+            if (isTransitioning || activePlanet) return;
+            const touch = e.touches[0];
+            mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
             const hits = raycaster.intersectObjects(interactables);
             if (hits.length > 0) {
@@ -511,8 +561,6 @@
             
             updateModal();
             document.getElementById('content-modal').classList.add('active');
-            
-            // Pausar auto-rotate si estuviera activo
             controls.autoRotate = false;
         }
 
@@ -537,7 +585,6 @@
                 img.style.opacity = 1;
             }, 300);
 
-            // Mostrar u ocultar botones según cantidad de slides
             document.getElementById('prev-btn').style.display = data.slides.length > 1 ? 'block' : 'none';
             document.getElementById('next-btn').style.display = data.slides.length > 1 ? 'block' : 'none';
         }
@@ -550,34 +597,52 @@
 
         function start() {
             document.getElementById('start-screen').style.opacity = 0;
-            setTimeout(() => document.getElementById('start-screen').remove(), 1500);
+            setTimeout(() => document.getElementById('start-screen').remove(), 1200);
             const audio = document.getElementById('bg-audio');
-            audio.volume = 0.3;
+            audio.volume = 0.2;
             audio.play().catch(() => {});
         }
 
-        // Animación principal
+        // ---------------------------------------------------------------
+        // 7. ANIMACIONES ADICIONALES
+        // ---------------------------------------------------------------
         function animate() {
             requestAnimationFrame(animate);
             
+            const time = Date.now() * 0.001; // segundos
+
             if (!activePlanet) {
-                // Rotación de planetas alrededor del sol
+                // Rotación orbital
                 planets.forEach(p => {
                     if (p.userData.distance > 0) {
-                        p.userData.angle += p.userData.speed * 0.5; // velocidad ajustada
+                        p.userData.angle += p.userData.speed * 0.4; // más lento
                         p.position.x = Math.cos(p.userData.angle) * p.userData.distance;
                         p.position.z = Math.sin(p.userData.angle) * p.userData.distance;
                     }
-                    // Rotación sobre sí mismo
-                    p.rotation.y += 0.002;
+                    // Rotación propia
+                    p.rotation.y += 0.0015;
+                    
+                    // Animación de flotación vertical suave
+                    p.position.y = Math.sin(time * 0.8 + p.userData.angle) * 1.2;
+
+                    // Rotar anillos si existen
+                    if (p.userData.ring) {
+                        p.userData.ring.rotation.y += 0.002;
+                        p.userData.ring.rotation.x = Math.PI / 2.2 + Math.sin(time * 0.5) * 0.05;
+                    }
                 });
+
+                // Animar partículas de polvo (rotación lenta)
+                if (scene.userData.dust) {
+                    scene.userData.dust.rotation.y += 0.0003;
+                }
             }
 
-            // Transición suave de cámara
+            // Transición de cámara suave
             if (isTransitioning && window.targetCam) {
                 camera.position.lerp(window.targetCam, 0.05);
                 controls.target.lerp(window.targetLook, 0.05);
-                if (camera.position.distanceTo(window.targetCam) < 0.5) isTransitioning = false;
+                if (camera.position.distanceTo(window.targetCam) < 0.8) isTransitioning = false;
             }
 
             controls.update();
@@ -590,7 +655,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Iniciar
+        // Iniciar todo
         init();
     </script>
 </body>
