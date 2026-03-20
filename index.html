@@ -8,10 +8,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             overflow: hidden; 
-            background-color: #020205; 
+            background-color: #000; 
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             color: #fff;
-            touch-action: none; /* Evita scroll mientras se interactúa con el canvas */
+            touch-action: none;
             -webkit-tap-highlight-color: transparent;
         }
         #webgl-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
@@ -19,172 +19,155 @@
         /* Pantalla de inicio */
         #start-screen {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 30% 40%, #251d2e, #020205 80%);
+            background: radial-gradient(circle at 50% 50%, #1a0b26 0%, #000000 80%);
             z-index: 50;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1.2s ease;
+            transition: opacity 1.2s ease-in-out, visibility 1.2s;
             padding: 20px;
         }
         #start-screen h1 { 
-            font-size: clamp(2rem, 14vw, 5rem); 
-            margin-bottom: 30px; 
-            letter-spacing: 0.2em;
+            font-size: clamp(2rem, 12vw, 5rem); 
+            margin-bottom: 40px; 
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            font-weight: 200;
+            font-weight: 300;
             text-align: center;
-            background: linear-gradient(135deg, #ffffff, #c9b6e0);
+            background: linear-gradient(135deg, #ffffff, #ffb6c1, #c9b6e0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(255,255,255,0.3);
+            text-shadow: 0 0 50px rgba(255,182,193,0.5);
+            animation: pulseText 3s infinite alternate;
         }
         
-        .btn {
-            background: rgba(255,255,255,0.1); 
-            border: 1.5px solid rgba(255, 240, 250, 0.7);
-            color: white; 
-            padding: 18px 40px; 
-            font-size: 1.3rem; 
-            border-radius: 80px;
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            letter-spacing: 4px; 
-            text-transform: uppercase;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(255,255,240,0.3);
-            min-width: 280px;
-            max-width: 90%;
-            font-weight: 500;
-            border: none;
-            background: rgba(60, 30, 60, 0.8);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .btn:active { 
-            transform: scale(0.96); 
-            background: rgba(180, 100, 160, 0.9); 
-            box-shadow: 0 0 40px #ffb6c1;
+        @keyframes pulseText {
+            0% { filter: drop-shadow(0 0 15px rgba(255,255,255,0.2)); transform: scale(1); }
+            100% { filter: drop-shadow(0 0 35px rgba(255,182,193,0.7)); transform: scale(1.03); }
         }
 
-        /* Modal táctil mejorado (más grande en móvil) */
+        .btn {
+            background: rgba(255,255,255,0.08); 
+            border: 1px solid rgba(255, 182, 193, 0.6);
+            color: white; 
+            padding: 20px 45px; 
+            font-size: 1.2rem; 
+            border-radius: 50px;
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,182,193,0.15);
+            max-width: 90%;
+            font-weight: 500;
+        }
+        .btn:hover { background: rgba(255,182,193,0.25); transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(255,182,193,0.4); }
+        .btn:active { transform: translateY(2px) scale(0.95); }
+
+        /* Modal interactivo optimizado para rapidez */
         #content-modal {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
-            width: 94%; 
-            max-width: 700px;
-            background: rgba(15, 10, 20, 0.8);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 200, 230, 0.3);
-            border-radius: 48px;
-            padding: 30px 24px 35px;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%) scale(0.95);
+            width: 92%; 
+            max-width: 650px;
+            background: linear-gradient(145deg, rgba(15, 8, 25, 0.9), rgba(5, 2, 10, 0.95));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 182, 193, 0.25);
+            border-radius: 35px;
+            padding: 30px;
             z-index: 20;
             opacity: 0; pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.1) inset;
-            max-height: 85vh;
-            overflow-y: auto; 
-            touch-action: pan-y; /* permite scroll dentro del modal si es necesario */
+            transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.15);
+            display: flex; flex-direction: column; align-items: center;
         }
         #content-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         
         #modal-title { 
-            font-size: 2.2rem; 
-            margin-bottom: 16px; 
-            font-weight: 300; 
-            letter-spacing: 1.5px; 
-            border-bottom: 1px solid rgba(255,255,255,0.2); 
-            padding-bottom: 15px; 
-            color: #ffe6f0;
-            text-shadow: 0 0 25px #ff99cc;
+            font-size: 2.1rem; 
+            margin-bottom: 20px; 
+            font-weight: 400; 
+            letter-spacing: 2px; 
+            color: #fff0f5;
+            text-shadow: 0 0 25px rgba(255,182,193,0.9);
+            text-align: center;
             font-family: 'Georgia', serif;
-            word-break: break-word;
         }
-        
+       
         .carousel-container { 
             position: relative; 
             width: 100%; 
-            aspect-ratio: 16/9;
-            max-height: 280px;
+            height: 320px; 
             overflow: hidden; 
-            margin-bottom: 20px; 
-            border-radius: 32px; 
-            background: #0a0a12; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 25px; 
+            border-radius: 20px; 
+            background: #000; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            display: flex; justify-content: center; align-items: center;
         }
+
+        #carousel-bg {
+            position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+            object-fit: cover; filter: blur(25px) brightness(0.35); z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
         #carousel-image { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            transition: opacity 0.5s ease; 
-            border-radius: 32px;
-            pointer-events: none;
+            position: relative; z-index: 2; width: 100%; height: 100%; 
+            object-fit: contain; 
+            transition: opacity 0.3s ease; 
+            border-radius: 8px; pointer-events: none;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
         }
         
         #modal-text { 
-            font-size: 1.2rem; 
+            font-size: 1.15rem; 
             line-height: 1.7; 
-            color: #f0def0; 
+            color: #f3e6f3; 
             font-weight: 300; 
-            margin-bottom: 25px; 
-            padding: 0 8px;
-            font-style: italic;
+            margin-bottom: 30px; 
             text-align: center;
+            font-style: italic;
             min-height: 80px;
+            width: 100%;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            animation: fadeIn 0.4s ease forwards;
         }
 
-        .controls { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .controls { display: flex; justify-content: center; gap: 15px; width: 100%; }
+        
         .nav-btn, .close-btn {
-            background: rgba(40, 20, 35, 0.9); 
-            border: 1px solid rgba(255, 180, 210, 0.7);
-            color: white; 
-            padding: 18px 12px; 
-            font-size: 1.2rem; 
-            cursor: pointer; 
-            transition: all 0.15s;
-            text-transform: uppercase; 
-            letter-spacing: 1.5px;
-            border-radius: 80px;
-            backdrop-filter: blur(5px);
-            flex: 1 1 140px;
-            min-width: 140px;
-            font-weight: 500;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-            border: none;
-            background: rgba(90, 40, 70, 0.9);
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 182, 193, 0.4);
+            color: white; padding: 16px 20px; font-size: 1rem; 
+            cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 2px;
+            border-radius: 50px; flex: 1; font-weight: 600;
         }
-        .nav-btn:active, .close-btn:active { transform: scale(0.94); background: #b34e7a; box-shadow: 0 0 30px #ffaacc; }
-        .close-btn { background: rgba(100, 40, 50, 0.9); border-color: rgba(255, 120, 120, 0.8); }
-        .close-btn:active { background: #c24a5e; }
+        .nav-btn:hover { background: rgba(255, 182, 193, 0.2); border-color: rgba(255, 182, 193, 0.9); }
+        .nav-btn:active { transform: scale(0.92); }
+        .close-btn { background: rgba(255, 50, 100, 0.2); border-color: rgba(255, 100, 120, 0.6); color: #ffccd5; }
+        .close-btn:hover { background: rgba(255, 50, 100, 0.35); box-shadow: 0 0 25px rgba(255,50,100,0.5); }
 
         #instructions {
-            position: absolute; bottom: 25px; left: 0; width: 100%;
-            text-align: center; color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; z-index: 10;
-            letter-spacing: 2px; text-transform: uppercase; pointer-events: none;
-            text-shadow: 0 0 15px black;
-            padding: 0 15px;
-            font-weight: 400;
+            position: absolute; bottom: 30px; left: 0; width: 100%;
+            text-align: center; color: rgba(255, 255, 255, 0.85); font-size: 0.9rem; z-index: 10;
+            letter-spacing: 3px; text-transform: uppercase; pointer-events: none;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+            animation: float 4s ease-in-out infinite;
         }
 
-        #error-message {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            text-align: center; display: none; z-index: 100; padding: 35px;
-            background: rgba(40, 10, 25, 0.98); border: 1px solid #ff4d6d; border-radius: 50px;
-            color: white; width: 90%; max-width: 450px;
-            font-size: 1.2rem;
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* Ajustes extra táctiles */
         @media (max-width: 600px) {
-            #content-modal { padding: 24px 18px; border-radius: 40px; }
-            .carousel-container { max-height: 220px; }
-            .nav-btn, .close-btn { padding: 20px 10px; font-size: 1.1rem; min-width: 120px; }
-            #modal-title { font-size: 1.9rem; }
-            #modal-text { font-size: 1.1rem; }
-            .btn { padding: 16px 30px; font-size: 1.2rem; min-width: 240px; }
+            #content-modal { padding: 25px 20px; border-radius: 30px; width: 95%; max-height: 90vh; overflow-y: auto; }
+            .carousel-container { height: 260px; }
+            .nav-btn, .close-btn { padding: 15px 10px; font-size: 0.9rem; letter-spacing: 1px; }
+            #modal-title { font-size: 1.8rem; margin-bottom: 15px; }
+            #modal-text { font-size: 1.05rem; margin-bottom: 20px; line-height: 1.5; }
+            .controls { flex-wrap: wrap; }
+            .close-btn { order: 3; min-width: 100%; margin-top: 5px; }
         }
     </style>
 
@@ -204,26 +187,26 @@
     </audio>
 
     <div id="start-screen">
-        <h1>FELIZ CUMPLEAÑOS MAMI </h1>
-        <button class="btn" id="start-btn"> TOCA PARA ENTRAR A NUESTRO UNIVERSO</button>
+        <h1>FELIZ CUMPLEAÑOS MAMI</h1>
+        <button class="btn" id="start-btn">Toca para entrar a nuestro universo</button>
     </div>
 
     <div id="instructions">🌟 Toca un planeta · Desliza para explorar 🌟</div>
-    <div id="error-message">⚠️ WebGL no está disponible. Prueba con Chrome o Safari.</div>
 
     <div id="webgl-container"></div>
 
     <div id="content-modal">
         <h2 id="modal-title">Cuerpo Celeste</h2>
         <div class="carousel-container">
+            <img id="carousel-bg" src="" alt="">
             <img id="carousel-image" src="" alt="Recuerdo estelar">
         </div>
         <p id="modal-text">Mensaje cargando...</p>
         
         <div class="controls">
             <button class="nav-btn" id="prev-btn">← Anterior</button>
-            <button class="close-btn" id="close-btn">✕ Cerrar</button>
             <button class="nav-btn" id="next-btn">Siguiente →</button>
+            <button class="close-btn" id="close-btn">✕ Cerrar</button>
         </div>
     </div>
 
@@ -231,253 +214,135 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // ---------------------------------------------------------------
-        // 1. DETECCIÓN DE MÓVIL Y AJUSTES DE RENDIMIENTO (enfoque Android)
-        // ---------------------------------------------------------------
-        const isAndroid = /Android/i.test(navigator.userAgent);
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        // En Android reducimos aún más la calidad para garantizar fluidez
-        const pixelRatio = isMobile ? 1 : Math.min(window.devicePixelRatio, 2);
-        const sphereSegments = isMobile ? 24 : 48; // menos polígonos en móvil
-        const starCount = isMobile ? 1500 : 3500;
+        // Aumentamos ligeramente la calidad en móviles modernos para mejor aspecto visual
+        const pixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2);
+        const sphereSegments = isMobile ? 48 : 64; 
+        const starCount = isMobile ? 2000 : 4500;
 
-        // ---------------------------------------------------------------
-        // 2. CONFIGURACIÓN DEL SISTEMA SOLAR (texturas mejoradas con fallback)
-        // ---------------------------------------------------------------
+        // Base de datos de los planetas (Velocidades reducidas a la mitad y Emojis añadidos)
         const solarSystem = [
             {
-                id: 'sun',
-                name: "EL Sol (MI SOL)",
-                color: 0xffaa33,
-                emissive: 0xff5500,
-                radius: 5.5,
-                distance: 0,
-                speed: 0.002,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
+                id: 'sun', name: "El Sol (MI SOL)",
+                color: 0xffdd44, emissive: 0xff6600, radius: 6.5, distance: 0, speed: 0.001,
                 slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0026.jpg", text: "El Principio de todo nuestro comienzo, me lleno de vida se puede decir que eres mi sol por que me das vida me formas y me llenas de luz eres mi sol por ser parte fundamental de mi vida ." },
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0028.jpg", text: "Hoy de doy gracias por todo por llevarme de la mano en todo monento por enseñarme y hacerme parte de tu vida y si ( ERES MI SOL) Por que te ganaste estar en el centro de mi universo  ." }
+                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0026.jpg", text: "El principio de todo nuestro comienzo 🌅✨. Me llenó de vida, se puede decir que eres mi sol porque me das vida, me formas y me llenas de luz 💛. Eres mi sol por ser parte fundamental de mi vida." },
+                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0028.jpg", text: "Hoy te doy gracias por todo 🙏, por llevarme de la mano en todo momento, por enseñarme y hacerme parte de tu vida y sí (ERES MI SOL 🌞💖) porque te ganaste estar en el centro de mi universo." }
                 ]
             },
             {
-                id: 'mercury',
-                name: "Mercurio · Primer Latido",
-                color: 0xaaaaaa,
-                radius: 0.9,
-                distance: 11,
-                speed: 0.015,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-                slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0029.jpg", text: "Tan cerca de ti todo es mas seguro hay calor , hay ternura y a pesar de que se complica siempre estamos en una misma orbita." }
-                ]
-            },
-            {
-                id: 'venus',
-                name: "Venus · Brillo Eterno",
-                color: 0xe6b856,
-                radius: 1.2,
-                distance: 16,
-                speed: 0.012,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-                slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0046.jpg", text: " eres tan necesario para mi vida y existencia que aveces dejo de pensar en la mia, somos dos cuerpos similares en nuestros deseos y quiero y deseo acompañarte en cada uno de ellos  ." }
-                ]
-            },
-            {
-                id: 'earth',
-                name: "Nuestro Mundo",
-                color: 0x2288ff,
-                radius: 1.3,
-                distance: 22,
-                speed: 0.01,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-                slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20250105-WA0033.jpg", text: "Tú eres mi hogar, mi lugar seguro en el universo la que me da la paz mi mundo contigo es mucho mas seguro y siempre quiero estar contigo mi mundo contigo son todos esos sueños y deseos sami esa bebe con tus ojitos y todo lo que soñamos ." }
-                ]
-            },
-            {
-                id: 'mars',
-                name: "Marte · Pasión Ardiente",
-                color: 0xd84c3c,
-                radius: 1.1,
-                distance: 29,
-                speed: 0.008,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-                slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0018.jpg", text: "Cruzaría desiertos enteros solo para estar a tu lado Si es verdad aveces se complican las cosas , tenemos inconvenientes pero de eso se trata el amor de no importar si tengo que hacer mi camino mas dificil para que el tuyo sea mas sencillo ." }
-                ]
-            },
-            {
-                id: 'jupiter',
-                name: "Júpiter · Gigante de Amor",
-                color: 0xd8a27a,a
-                radius: 3.2,
-                distance: 44,
-                speed: 0.006,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-                slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0053.jpg", text: "Mi amor por ti es tan inmenso como el planeta más grande en cantidades descomunales hoy es un día donde debo dar GRACIAS, gracias por qué estás en mi mundo gracias por que te tengo gracias por cada momento que me brindas a tu lado ." }
-                ]
-            },
-            {
-                id: 'saturn',
-                name: "Saturno · Joya Anillada",
-                color: 0xc0a06e,
-                radius: 2.7,
-                distance: 62,
-                speed: 0.005,
-                hasRings: true,
-                texture: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-                slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0060.jpg", text: "Eres mi joya más preciada, rodeada de belleza sin fin." }
-                ]
-            }
-        ];
 
-        // ---------------------------------------------------------------
-        // 3. INICIALIZACIÓN DE LA ESCENA (con mejoras táctiles)
-        // ---------------------------------------------------------------
         let scene, camera, renderer, controls, raycaster;
         let planets = [];
-        let interactables = [];
+        let interactables = []; // Cajas de colisión (Hitboxes)
         let isTransitioning = false;
         let activePlanet = null;
         let currentSlide = 0;
-        const initialCamPos = new THREE.Vector3(0, 20, 80); // mejor vista
+        let stars, cosmicDust;
+        const initialCamPos = new THREE.Vector3(0, 35, 100);
 
         function init() {
-            try {
-                scene = new THREE.Scene();
-                scene.background = new THREE.Color(0x030311);
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000003);
+            scene.fog = new THREE.FogExp2(0x000003, 0.004); 
 
-                camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-                camera.position.copy(initialCamPos);
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.copy(initialCamPos);
 
-                renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false, powerPreference: "default" });
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(pixelRatio);
-                renderer.toneMapping = THREE.ACESFilmicToneMapping;
-                renderer.toneMappingExposure = 1.0;
-                document.getElementById('webgl-container').appendChild(renderer.domElement);
+            renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(pixelRatio);
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.3;
+            document.getElementById('webgl-container').appendChild(renderer.domElement);
 
-                // Controles adaptados a táctil (más sensibles y con límites)
-                controls = new OrbitControls(camera, renderer.domElement);
-                controls.enableDamping = true;
-                controls.dampingFactor = 0.12;
-                controls.rotateSpeed = isMobile ? 1.0 : 0.8; // más rápido al deslizar
-                controls.zoomSpeed = 1.2;
-                controls.panSpeed = 0.5;
-                controls.maxDistance = 200;
-                controls.minDistance = 15;
-                controls.enablePan = false; // desactivamos pan en móvil para evitar gestos accidentales
-                controls.enableZoom = true;
-                controls.maxPolarAngle = Math.PI / 2.2;
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.06; // Suavidad de cámara
+            controls.rotateSpeed = 0.8;
+            controls.maxDistance = 160;
+            controls.minDistance = 12;
+            controls.enablePan = false;
+            controls.maxPolarAngle = Math.PI / 1.7;
 
-                // Iluminación
-                const ambient = new THREE.AmbientLight(0x40406b);
-                scene.add(ambient);
+            // Iluminación realista
+            const ambient = new THREE.AmbientLight(0x1a1a2e, 0.4);
+            scene.add(ambient);
 
-                const sunLight = new THREE.PointLight(0xffeedd, 2.2, 300);
-                sunLight.position.set(0, 0, 0);
-                scene.add(sunLight);
+            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x0a0a1a, 0.5);
+            scene.add(hemiLight);
 
-                // Fondo de estrellas
-                createStarfield();
+            const sunLight = new THREE.PointLight(0xffeedd, 3.5, 500);
+            scene.add(sunLight);
 
-                // Partículas de polvo
-                createDustParticles();
+            createUniverseSandboxEffects();
+            buildPlanets();
 
-                // Raycaster
-                raycaster = new THREE.Raycaster();
+            raycaster = new THREE.Raycaster();
 
-                buildPlanets();
+            window.addEventListener('resize', onResize);
+            setupTouchInteractions();
 
-                // Eventos unificados (usamos PointerEvent para mejor soporte táctil)
-                window.addEventListener('resize', onResize);
-                window.addEventListener('pointerdown', onPointerDown);
-                document.getElementById('start-btn').addEventListener('click', start);
-                document.getElementById('close-btn').addEventListener('click', close);
-                document.getElementById('prev-btn').addEventListener('click', () => moveSlide(-1));
-                document.getElementById('next-btn').addEventListener('click', () => moveSlide(1));
+            document.getElementById('start-btn').addEventListener('click', start);
+            document.getElementById('close-btn').addEventListener('click', close);
+            document.getElementById('prev-btn').addEventListener('click', () => moveSlide(-1));
+            document.getElementById('next-btn').addEventListener('click', () => moveSlide(1));
 
-                animate();
-            } catch (e) {
-                console.error("Error al inicializar:", e);
-                document.getElementById('error-message').style.display = 'block';
-                document.getElementById('start-screen').style.display = 'none';
-            }
+            animate();
         }
 
-        // ---------------------------------------------------------------
-        // 4. ELEMENTOS VISUALES
-        // ---------------------------------------------------------------
-        function createStarfield() {
+        function createUniverseSandboxEffects() {
+            // Estrellas de fondo
             const starsGeo = new THREE.BufferGeometry();
             const positions = new Float32Array(starCount * 3);
-            const colors = new Float32Array(starCount * 3);
+            const sizes = new Float32Array(starCount);
             for (let i = 0; i < starCount; i++) {
-                const r = 300 + Math.random() * 400;
+                const r = 250 + Math.random() * 600;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
                 positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
                 positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
                 positions[i*3+2] = r * Math.cos(phi);
-                
-                const intensity = 0.5 + Math.random() * 0.5;
-                colors[i*3] = intensity;
-                colors[i*3+1] = intensity * (0.7 + 0.3*Math.random());
-                colors[i*3+2] = intensity * (0.8 + 0.4*Math.random());
+                sizes[i] = Math.random() * 2.5;
             }
             starsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            starsGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            
-            const starMat = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
-            const stars = new THREE.Points(starsGeo, starMat);
+            starsGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            const starMat = new THREE.PointsMaterial({ color: 0xffffff, transparent: true, opacity: 0.9, sizeAttenuation: true });
+            stars = new THREE.Points(starsGeo, starMat);
             scene.add(stars);
-        }
 
-        function createDustParticles() {
+            // Polvo Cósmico (Nebulosa sutil)
             const dustGeo = new THREE.BufferGeometry();
-            const count = 600;
-            const positions = new Float32Array(count * 3);
-            for (let i = 0; i < count; i++) {
-                const r = 20 + Math.random() * 70;
+            const dustCount = 800;
+            const dustPos = new Float32Array(dustCount * 3);
+            for (let i = 0; i < dustCount; i++) {
+                const r = 20 + Math.random() * 120;
                 const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
-                positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
-                positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta) * 0.5;
-                positions[i*3+2] = r * Math.cos(phi);
+                const phi = Math.random() * Math.PI - Math.PI / 2; // Más plano como un disco
+                dustPos[i*3] = r * Math.cos(theta);
+                dustPos[i*3+1] = (Math.random() - 0.5) * 15; // Variación vertical
+                dustPos[i*3+2] = r * Math.sin(theta);
             }
-            dustGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const dustMat = new THREE.PointsMaterial({ color: 0xaaccff, size: 0.8, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
-            const dust = new THREE.Points(dustGeo, dustMat);
-            scene.add(dust);
-            scene.userData.dust = dust;
+            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+            const dustMat = new THREE.PointsMaterial({ color: 0x88bbff, size: 0.6, transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending });
+            cosmicDust = new THREE.Points(dustGeo, dustMat);
+            scene.add(cosmicDust);
         }
 
-        // ---------------------------------------------------------------
-        // 5. CONSTRUCCIÓN DE PLANETAS (con hitboxes ligeramente mayores para facilitar toque)
-        // ---------------------------------------------------------------
         function buildPlanets() {
             const loader = new THREE.TextureLoader();
+            const planetTex = loader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
 
             solarSystem.forEach(data => {
                 const group = new THREE.Group();
                 
-                // Textura (cargamos con manejo de error básico)
-                let texture;
-                try {
-                    texture = loader.load(data.texture);
-                } catch (e) {
-                    texture = null;
-                }
-                
+                // Material del planeta
                 const material = new THREE.MeshStandardMaterial({
-                    map: texture,
+                    map: data.id !== 'sun' ? planetTex : null,
                     color: data.color,
                     emissive: data.emissive || 0x000000,
-                    emissiveIntensity: data.id === 'sun' ? 0.4 : 0.02,
-                    roughness: 0.6,
+                    emissiveIntensity: data.id === 'sun' ? 2 : 0.05,
+                    roughness: 0.8,
                     metalness: 0.1
                 });
 
@@ -485,73 +350,108 @@
                 const mesh = new THREE.Mesh(geo, material);
                 group.add(mesh);
 
-                // Añadir un collider invisible más grande para facilitar toque (opcional)
-                // Pero usaremos el propio mesh con un tamaño ligeramente mayor en el raycaster no es posible.
-                // En su lugar, podemos escalar el mesh en el raycaster? no. Mejor dejamos así.
+                // Hitbox invisible más grande (Facilita el toque táctil en móviles)
+                const hitboxGeo = new THREE.SphereGeometry(data.radius * 1.8, 16, 16);
+                const hitboxMat = new THREE.MeshBasicMaterial({ visible: false });
+                const hitbox = new THREE.Mesh(hitboxGeo, hitboxMat);
+                hitbox.userData.parentGroup = group; // Referencia al grupo
+                group.add(hitbox);
+                interactables.push(hitbox); // Raycaster solo verifica el hitbox
+
+                // Atmósferas volumétricas / Resplandor
+                if (data.id === 'sun') {
+                    // Corona interior
+                    const coronaMat1 = new THREE.MeshBasicMaterial({ color: 0xff9900, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
+                    const corona1 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.2, 32, 32), coronaMat1);
+                    // Corona exterior
+                    const coronaMat2 = new THREE.MeshBasicMaterial({ color: 0xff5500, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending });
+                    const corona2 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.6, 32, 32), coronaMat2);
+                    group.add(corona1, corona2);
+                    group.userData.isSun = true;
+                    group.userData.coronas = [corona1, corona2];
+                } else {
+                    // Atmósfera sutil para planetas
+                    const atmosMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending });
+                    const atmos = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.08, 32, 32), atmosMat);
+                    group.add(atmos);
+                }
 
                 if (data.hasRings) {
-                    const ringGeo = new THREE.RingGeometry(data.radius * 1.2, data.radius * 2.0, 48);
+                    const ringGeo = new THREE.RingGeometry(data.radius * 1.4, data.radius * 2.4, 64);
                     const ringMat = new THREE.MeshStandardMaterial({
-                        color: 0xc0b0a0,
-                        side: THREE.DoubleSide,
-                        transparent: true,
-                        opacity: 0.3,
-                        emissive: 0x221100
+                        color: 0xddccaa, side: THREE.DoubleSide, transparent: true, opacity: 0.8, roughness: 0.6
                     });
                     const ring = new THREE.Mesh(ringGeo, ringMat);
-                    ring.rotation.x = Math.PI / 2.2;
-                    ring.rotation.z = 0.3;
+                    ring.rotation.x = Math.PI / 2.1;
                     group.add(ring);
                     group.userData.ring = ring;
                 }
 
                 const angle = Math.random() * Math.PI * 2;
                 group.position.set(Math.cos(angle) * data.distance, 0, Math.sin(angle) * data.distance);
-                
                 group.userData = { ...data, angle };
+                
                 scene.add(group);
                 planets.push(group);
-                interactables.push(mesh); // el mesh es el que detecta clics
             });
 
-            // Órbitas
+            // Órbitas sutiles tipo Universe Sandbox
             planets.forEach(p => {
                 if (p.userData.distance > 0) {
                     const points = [];
-                    const segments = 96;
-                    for (let i = 0; i <= segments; i++) {
-                        const angle = (i / segments) * Math.PI * 2;
+                    for (let i = 0; i <= 128; i++) {
+                        const angle = (i / 128) * Math.PI * 2;
                         points.push(new THREE.Vector3(Math.cos(angle) * p.userData.distance, 0, Math.sin(angle) * p.userData.distance));
                     }
-                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                    const material = new THREE.LineBasicMaterial({ color: 0x668899, transparent: true, opacity: 0.12 });
-                    const orbitLine = new THREE.LineLoop(geometry, material);
-                    scene.add(orbitLine);
+                    const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08 });
+                    scene.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(points), material));
                 }
             });
         }
+        // Lógica de Toque Avanzada (Diferencia Tap vs Swipe)
+        function setupTouchInteractions() {
+            let startPos = new THREE.Vector2();
+            let isDragging = false;
+            const dragThreshold = 5; // Píxeles de tolerancia
 
-        // ---------------------------------------------------------------
-        // 6. MANEJADORES TÁCTILES (PointerEvent unificado)
-        // ---------------------------------------------------------------
-        function onPointerDown(e) {
-            // Prevenir comportamientos por defecto (zoom, scroll)
-            e.preventDefault();
-            
-            if (isTransitioning || activePlanet) return;
+            const getEventCoords = (e) => {
+                if (e.changedTouches) {
+                    return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+                }
+                return { x: e.clientX, y: e.clientY };
+            };
 
-            // Calcular coordenadas normalizadas
-            const rect = renderer.domElement.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-            const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+            window.addEventListener('pointerdown', (e) => {
+                if (e.target.tagName === 'BUTTON' || e.target.closest('#content-modal')) return;
+                const coords = getEventCoords(e);
+                startPos.set(coords.x, coords.y);
+                isDragging = false;
+            });
 
-            const mouse = new THREE.Vector2(x, y);
-            raycaster.setFromCamera(mouse, camera);
-            const hits = raycaster.intersectObjects(interactables);
-            if (hits.length > 0) {
-                const planetGroup = hits[0].object.parent;
-                selectPlanet(planetGroup);
-            }
+            window.addEventListener('pointermove', (e) => {
+                const coords = getEventCoords(e);
+                if (startPos.distanceTo(new THREE.Vector2(coords.x, coords.y)) > dragThreshold) {
+                    isDragging = true;
+                }
+            });
+
+            window.addEventListener('pointerup', (e) => {
+                if (e.target.tagName === 'BUTTON' || e.target.closest('#content-modal')) return;
+                if (isDragging || isTransitioning || activePlanet) return; // Si arrastró, no es un clic.
+
+                const coords = getEventCoords(e);
+                const rect = renderer.domElement.getBoundingClientRect();
+                const x = ((coords.x - rect.left) / rect.width) * 2 - 1;
+                const y = -((coords.y - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+                const hits = raycaster.intersectObjects(interactables);
+                
+                if (hits.length > 0) {
+                    // Accedemos al grupo padre a través del userData del hitbox
+                    selectPlanet(hits[0].object.userData.parentGroup);
+                }
+            });
         }
 
         function selectPlanet(planet) {
@@ -560,8 +460,8 @@
             isTransitioning = true;
             
             const data = planet.userData;
-            const offset = data.radius * 4.5;
-            window.targetCam = planet.position.clone().add(new THREE.Vector3(offset, offset/3, offset));
+            const offset = data.radius * 3.2 + 4; 
+            window.targetCam = planet.position.clone().add(new THREE.Vector3(offset, offset/2.5, offset));
             window.targetLook = planet.position.clone();
             
             updateModal();
@@ -580,15 +480,23 @@
         function updateModal() {
             const data = activePlanet.userData;
             const slide = data.slides[currentSlide];
+            
             document.getElementById('modal-title').innerText = data.name;
-            document.getElementById('modal-text').innerText = slide.text;
+            
+            const textEl = document.getElementById('modal-text');
+            textEl.style.animation = 'none'; textEl.offsetHeight; textEl.style.animation = null;
+            textEl.innerText = slide.text;
             
             const img = document.getElementById('carousel-image');
-            img.style.opacity = 0;
+            const bgImg = document.getElementById('carousel-bg');
+            
+            img.style.opacity = 0; bgImg.style.opacity = 0;
+            
+            // Tiempo de carga ultra rápido para respuesta ágil
             setTimeout(() => {
-                img.src = slide.image;
-                img.style.opacity = 1;
-            }, 300);
+                img.src = slide.image; bgImg.src = slide.image;
+                img.style.opacity = 1; bgImg.style.opacity = 1;
+            }, 50);
 
             document.getElementById('prev-btn').style.display = data.slides.length > 1 ? 'block' : 'none';
             document.getElementById('next-btn').style.display = data.slides.length > 1 ? 'block' : 'none';
@@ -601,47 +509,50 @@
         }
 
         function start() {
-            document.getElementById('start-screen').style.opacity = 0;
-            setTimeout(() => document.getElementById('start-screen').remove(), 1200);
+            const screen = document.getElementById('start-screen');
+            screen.style.opacity = 0;
+            setTimeout(() => { screen.style.visibility = 'hidden'; }, 1200);
+            
             const audio = document.getElementById('bg-audio');
-            audio.volume = 0.2;
+            audio.volume = 0.4;
             audio.play().catch(() => {});
         }
 
-        // ---------------------------------------------------------------
-        // 7. ANIMACIONES
-        // ---------------------------------------------------------------
+        const clock = new THREE.Clock();
+
         function animate() {
             requestAnimationFrame(animate);
             
-            const time = Date.now() * 0.001;
+            const delta = clock.getDelta();
+            const time = clock.getElapsedTime();
 
-            if (!activePlanet) {
-                planets.forEach(p => {
+            if(stars) stars.rotation.y = time * 0.005;
+            if(cosmicDust) cosmicDust.rotation.y = time * 0.015;
+
+            planets.forEach(p => {
+                // Rotación suave del planeta (reducida para realismo)
+                p.rotation.y += delta * 0.15;
+
+                if (p.userData.isSun) {
+                    p.userData.coronas[0].scale.setScalar(1 + Math.sin(time * 2) * 0.03);
+                    p.userData.coronas[1].scale.setScalar(1 + Math.sin(time * 1.5) * 0.05);
+                }
+
+                if (!activePlanet) {
                     if (p.userData.distance > 0) {
-                        p.userData.angle += p.userData.speed * 0.5;
+                        p.userData.angle += p.userData.speed;
                         p.position.x = Math.cos(p.userData.angle) * p.userData.distance;
                         p.position.z = Math.sin(p.userData.angle) * p.userData.distance;
                     }
-                    p.rotation.y += 0.002;
-                    
-                    // Flotación suave
-                    p.position.y = Math.sin(time * 1.2 + p.userData.angle) * 0.8;
-
-                    if (p.userData.ring) {
-                        p.userData.ring.rotation.y += 0.003;
-                    }
-                });
-
-                if (scene.userData.dust) {
-                    scene.userData.dust.rotation.y += 0.0002;
+                    p.position.y = Math.sin(time * 0.5 + p.userData.angle) * 0.6;
                 }
-            }
+            });
 
+            // Transición veloz y fluida (0.12 = más rápido)
             if (isTransitioning && window.targetCam) {
-                camera.position.lerp(window.targetCam, 0.07);
-                controls.target.lerp(window.targetLook, 0.07);
-                if (camera.position.distanceTo(window.targetCam) < 0.5) isTransitioning = false;
+                camera.position.lerp(window.targetCam, 0.12);
+                controls.target.lerp(window.targetLook, 0.12);
+                if (camera.position.distanceTo(window.targetCam) < 0.2) isTransitioning = false;
             }
 
             controls.update();
@@ -658,3 +569,34 @@
     </script>
 </body>
 </html>
+
+                id: 'mercury', name: "Mercurio · Primer Latido",
+                color: 0xbbbbbb, radius: 0.9, distance: 14, speed: 0.007,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0029.jpg", text: "Tan cerca de ti todo es más seguro 🫂, hay calor, hay ternura 🌡️ y a pesar de que se complica siempre estamos en una misma órbita 💫." }]
+            },
+            {
+                id: 'venus', name: "Venus · Brillo Eterno",
+                color: 0xe6b856, radius: 1.2, distance: 20, speed: 0.006,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0046.jpg", text: "Eres tan necesaria para mi vida y existencia que a veces dejo de pensar en la mía 👩‍❤️‍👨. Somos dos cuerpos similares en nuestros deseos y quiero acompañarte en cada uno de ellos 🌠❤️." }]
+            },
+            {
+                id: 'earth', name: "Nuestro Mundo",
+                color: 0x2288ff, emissive: 0x002244, radius: 1.4, distance: 27, speed: 0.005,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20250105-WA0033.jpg", text: "Tú eres mi hogar 🏡, mi lugar seguro en el universo, la que me da la paz 🌍. Mi mundo contigo es mucho más seguro y siempre quiero estar contigo. Mi mundo son todos esos sueños y deseos Sami, esa bebé con tus ojitos 👨‍👩‍👧💕 y todo lo que soñamos." }]
+            },
+            {
+                id: 'mars', name: "Marte · Pasión Ardiente",
+                color: 0xd84c3c, radius: 1.1, distance: 35, speed: 0.004,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0018.jpg", text: "Cruzaría desiertos enteros solo para estar a tu lado 🏜️🚶‍♂️. Es verdad que a veces se complican las cosas, pero de eso se trata el amor: de no importar si tengo que hacer mi camino más difícil para que el tuyo sea más sencillo ❤️‍🔥." }]
+            },
+            {
+                id: 'jupiter', name: "Júpiter · Gigante de Amor",
+                color: 0xd8a27a, radius: 3.2, distance: 49, speed: 0.003,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0053.jpg", text: "Mi amor por ti es tan inmenso como el planeta más grande, en cantidades descomunales 🪐🌌. Hoy es un día donde debo dar GRACIAS 🙌, gracias porque estás en mi mundo, gracias porque te tengo 🥰." }]
+            },
+            {
+                id: 'saturn', name: "Saturno · Joya Anillada",
+                color: 0xc0a06e, radius: 2.7, distance: 67, speed: 0.0025, hasRings: true,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0060.jpg", text: "Eres mi joya más preciada 💍, rodeada de belleza sin fin ✨🪐." }]
+            }
+        ];
