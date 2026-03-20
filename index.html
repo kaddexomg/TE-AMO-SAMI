@@ -92,7 +92,7 @@
             text-align: center;
             font-family: 'Georgia', serif;
         }
-       
+        
         .carousel-container { 
             position: relative; 
             width: 100%; 
@@ -226,11 +226,41 @@
                 id: 'sun', name: "El Sol (MI SOL)",
                 color: 0xffdd44, emissive: 0xff6600, radius: 6.5, distance: 0, speed: 0.001,
                 slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0026.jpg", text: "El principio de todo nuestro comienzo 🌅✨. Me llenó de vida, se puede decir que eres mi sol porque me das vida, me formas y me llenas de luz 💛. Eres mi sol por ser parte fundamental de mi vida." },
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0028.jpg", text: "Hoy te doy gracias por todo 🙏, por llevarme de la mano en todo momento, por enseñarme y hacerme parte de tu vida y sí (ERES MI SOL 🌞💖) porque te ganaste estar en el centro de mi universo." }
+                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0026.jpg", text: "El principio de todo nuestro comienzo 🌅✨. Me llenó de vida, se puede decir que eres mi sol porque me das vida, me formas y me llenas de luz 🤍. Eres mi sol por ser parte fundamental de mi vida." },
+                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0028.jpg", text: "Hoy te doy gracias por todo 🙏, por llevarme de la mano en todo momento, por enseñarme y hacerme parte de tu vida y sí (ERES MI SOL 🌞🤍) porque te ganaste estar en el centro de mi universo." }
                 ]
             },
             {
+                id: 'mercury', name: "Mercurio · Primer Latido",
+                color: 0xbbbbbb, radius: 0.9, distance: 14, speed: 0.007,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0029.jpg", text: "Tan cerca de ti todo es más seguro 🫂, hay calor, hay ternura 🌡️ y a pesar de que se complica siempre estamos en una misma órbita 💫." }]
+            },
+            {
+                id: 'venus', name: "Venus · Brillo Eterno",
+                color: 0xe6b856, radius: 1.2, distance: 20, speed: 0.006,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0046.jpg", text: "Eres tan necesaria para mi vida y existencia que a veces dejo de pensar en la mía 👩‍❤️‍👨. Somos dos cuerpos similares en nuestros deseos y quiero acompañarte en cada uno de ellos 🌠🤍." }]
+            },
+            {
+                id: 'earth', name: "Nuestro Mundo",
+                color: 0x2288ff, emissive: 0x002244, radius: 1.4, distance: 27, speed: 0.005,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20250105-WA0033.jpg", text: "Tú eres mi hogar 🏡, mi lugar seguro en el universo, la que me da la paz 🌍. Mi mundo contigo es mucho más seguro y siempre quiero estar contigo. Mi mundo son todos esos sueños y deseos Sami, esa bebé con tus ojitos 👨‍👩‍👧🤍y todo lo que soñamos." }]
+            },
+            {
+                id: 'mars', name: "Marte · Pasión Ardiente",
+                color: 0xd84c3c, radius: 1.1, distance: 35, speed: 0.004,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0018.jpg", text: "Cruzaría desiertos enteros solo para estar a tu lado 🏜️🚶‍♂️. Es verdad que a veces se complican las cosas, pero de eso se trata el amor: de no importar si tengo que hacer mi camino más difícil para que el tuyo sea más sencillo ❤️‍🔥." }]
+            },
+            {
+                id: 'jupiter', name: "Júpiter · Gigante de Amor",
+                color: 0xd8a27a, radius: 3.2, distance: 49, speed: 0.003,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0053.jpg", text: "Mi amor por ti es tan inmenso como el planeta más grande, en cantidades descomunales 🪐🌌. Hoy es un día donde debo dar GRACIAS 🙌, gracias porque estás en mi mundo, gracias porque te tengo 🥰." }]
+            },
+            {
+                id: 'saturn', name: "Saturno · Joya Anillada",
+                color: 0xc0a06e, radius: 2.7, distance: 67, speed: 0.0025, hasRings: true,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0060.jpg", text: "Eres mi joya más preciada 💍, rodeada de belleza sin fin ✨🪐🤍." }]
+            }
+        ];
 
         let scene, camera, renderer, controls, raycaster;
         let planets = [];
@@ -408,6 +438,7 @@
                 }
             });
         }
+
         // Lógica de Toque Avanzada (Diferencia Tap vs Swipe)
         function setupTouchInteractions() {
             let startPos = new THREE.Vector2();
@@ -568,35 +599,4 @@
         init();
     </script>
 </body>
-</html>
-
-                id: 'mercury', name: "Mercurio · Primer Latido",
-                color: 0xbbbbbb, radius: 0.9, distance: 14, speed: 0.007,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0029.jpg", text: "Tan cerca de ti todo es más seguro 🫂, hay calor, hay ternura 🌡️ y a pesar de que se complica siempre estamos en una misma órbita 💫." }]
-            },
-            {
-                id: 'venus', name: "Venus · Brillo Eterno",
-                color: 0xe6b856, radius: 1.2, distance: 20, speed: 0.006,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0046.jpg", text: "Eres tan necesaria para mi vida y existencia que a veces dejo de pensar en la mía 👩‍❤️‍👨. Somos dos cuerpos similares en nuestros deseos y quiero acompañarte en cada uno de ellos 🌠❤️." }]
-            },
-            {
-                id: 'earth', name: "Nuestro Mundo",
-                color: 0x2288ff, emissive: 0x002244, radius: 1.4, distance: 27, speed: 0.005,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20250105-WA0033.jpg", text: "Tú eres mi hogar 🏡, mi lugar seguro en el universo, la que me da la paz 🌍. Mi mundo contigo es mucho más seguro y siempre quiero estar contigo. Mi mundo son todos esos sueños y deseos Sami, esa bebé con tus ojitos 👨‍👩‍👧💕 y todo lo que soñamos." }]
-            },
-            {
-                id: 'mars', name: "Marte · Pasión Ardiente",
-                color: 0xd84c3c, radius: 1.1, distance: 35, speed: 0.004,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0018.jpg", text: "Cruzaría desiertos enteros solo para estar a tu lado 🏜️🚶‍♂️. Es verdad que a veces se complican las cosas, pero de eso se trata el amor: de no importar si tengo que hacer mi camino más difícil para que el tuyo sea más sencillo ❤️‍🔥." }]
-            },
-            {
-                id: 'jupiter', name: "Júpiter · Gigante de Amor",
-                color: 0xd8a27a, radius: 3.2, distance: 49, speed: 0.003,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0053.jpg", text: "Mi amor por ti es tan inmenso como el planeta más grande, en cantidades descomunales 🪐🌌. Hoy es un día donde debo dar GRACIAS 🙌, gracias porque estás en mi mundo, gracias porque te tengo 🥰." }]
-            },
-            {
-                id: 'saturn', name: "Saturno · Joya Anillada",
-                color: 0xc0a06e, radius: 2.7, distance: 67, speed: 0.0025, hasRings: true,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0060.jpg", text: "Eres mi joya más preciada 💍, rodeada de belleza sin fin ✨🪐." }]
-            }
-        ];
+</html>```
