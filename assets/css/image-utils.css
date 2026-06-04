@@ -1,0 +1,40 @@
+/* Utilidades para mostrar imágenes completas sin recortar */
+.img-frame {
+  width: 100%;
+  max-width: 1200px;       /* opcional, puedes cambiarlo */
+  margin: 0 auto;
+  /* Usa aspect-ratio para establecer un alto predecible; cambia según el layout */
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgba(0,0,0,0.08);
+  background-color: #f8f8f8;
+  display: block;
+  overflow: hidden;
+}
+
+/* Para <img> dentro de .img-frame: la imagen se escala y se ve completa */
+.img-frame > img,
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* clave: muestra la imagen completa sin recortar */
+  object-position: center;
+  display: block;
+  background-color: transparent;
+}
+
+/* Si prefieres aplicar directamente a <img> con un alto controlado */
+.img-contain-inline {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;           /* evita desbordes verticales */
+  display: block;
+  margin: 0 auto;
+}
+
+/* Background images: muestra completa (no recorta) */
+.bg-contain {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;   /* clave: muestra la imagen completa */
+  background-color: #fff;
+}
