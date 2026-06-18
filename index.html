@@ -67,107 +67,163 @@
         #content-modal {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%) scale(0.95);
             width: 92%; 
-            max-width: 650px;
-            background: linear-gradient(145deg, rgba(15, 8, 25, 0.9), rgba(5, 2, 10, 0.95));
+            max-width: 700px;
+            background: linear-gradient(145deg, rgba(15, 8, 25, 0.95), rgba(5, 2, 10, 0.98));
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 182, 193, 0.25);
+            border: 1px solid rgba(255, 182, 193, 0.3);
             border-radius: 35px;
-            padding: 30px;
+            padding: 35px;
             z-index: 20;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.15);
+            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.15);
             display: flex; flex-direction: column; align-items: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         #content-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         
+        /* Scrollbar styling para modal */
+        #content-modal::-webkit-scrollbar {
+            width: 6px;
+        }
+        #content-modal::-webkit-scrollbar-track {
+            background: rgba(255,182,193,0.1);
+            border-radius: 10px;
+        }
+        #content-modal::-webkit-scrollbar-thumb {
+            background: rgba(255,182,193,0.4);
+            border-radius: 10px;
+        }
+        #content-modal::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,182,193,0.6);
+        }
+        
         #modal-title { 
-            font-size: 2.1rem; 
-            margin-bottom: 20px; 
+            font-size: 2.3rem; 
+            margin-bottom: 25px; 
             font-weight: 400; 
             letter-spacing: 2px; 
             color: #fff0f5;
-            text-shadow: 0 0 25px rgba(255,182,193,0.9);
+            text-shadow: 0 0 30px rgba(255,182,193,1);
             text-align: center;
             font-family: 'Georgia', serif;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .carousel-container { 
             position: relative; 
             width: 100%; 
-            height: 320px; 
+            height: 420px; 
             overflow: hidden; 
-            margin-bottom: 25px; 
-            border-radius: 20px; 
-            background: #000; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            margin-bottom: 30px; 
+            border-radius: 25px; 
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(20,10,30,0.8));
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(255,182,193,0.1);
             display: flex; justify-content: center; align-items: center;
         }
 
         #carousel-bg {
             position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
-            object-fit: cover; filter: blur(25px) brightness(0.35); z-index: 1;
-            transition: opacity 0.3s ease;
+            object-fit: cover; filter: blur(30px) brightness(0.25) saturate(1.2); z-index: 1;
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         #carousel-image { 
             position: relative; z-index: 2; width: 100%; height: 100%; 
             object-fit: contain; 
-            transition: opacity 0.3s ease; 
-            border-radius: 8px; pointer-events: none;
-            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            border-radius: 20px; pointer-events: none;
+            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,182,193,0.3));
+            padding: 15px;
         }
         
         #modal-text { 
-            font-size: 1.15rem; 
-            line-height: 1.7; 
+            font-size: 1.2rem; 
+            line-height: 1.8; 
             color: #f3e6f3; 
             font-weight: 300; 
-            margin-bottom: 30px; 
+            margin-bottom: 35px; 
             text-align: center;
             font-style: italic;
-            min-height: 80px;
+            min-height: 90px;
             width: 100%;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-            animation: fadeIn 0.4s ease forwards;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
-        .controls { display: flex; justify-content: center; gap: 15px; width: 100%; }
+        .controls { display: flex; justify-content: center; gap: 18px; width: 100%; flex-wrap: wrap; }
         
         .nav-btn, .close-btn {
             background: rgba(255, 255, 255, 0.08); 
-            border: 1px solid rgba(255, 182, 193, 0.4);
-            color: white; padding: 16px 20px; font-size: 1rem; 
-            cursor: pointer; transition: all 0.2s;
+            border: 1.5px solid rgba(255, 182, 193, 0.5);
+            color: white; padding: 18px 25px; font-size: 1rem; 
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-transform: uppercase; letter-spacing: 2px;
-            border-radius: 50px; flex: 1; font-weight: 600;
+            border-radius: 50px; flex: 1; min-width: 120px; font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         }
-        .nav-btn:hover { background: rgba(255, 182, 193, 0.2); border-color: rgba(255, 182, 193, 0.9); }
-        .nav-btn:active { transform: scale(0.92); }
-        .close-btn { background: rgba(255, 50, 100, 0.2); border-color: rgba(255, 100, 120, 0.6); color: #ffccd5; }
-        .close-btn:hover { background: rgba(255, 50, 100, 0.35); box-shadow: 0 0 25px rgba(255,50,100,0.5); }
+        .nav-btn:hover { 
+            background: rgba(255, 182, 193, 0.25); 
+            border-color: rgba(255, 182, 193, 1); 
+            box-shadow: 0 10px 30px rgba(255,182,193,0.5);
+            transform: translateY(-2px);
+        }
+        .nav-btn:active { transform: scale(0.95); }
+        .close-btn { 
+            background: rgba(255, 50, 100, 0.15); 
+            border-color: rgba(255, 100, 120, 0.7); 
+            color: #ffccd5; 
+        }
+        .close-btn:hover { 
+            background: rgba(255, 50, 100, 0.35); 
+            box-shadow: 0 10px 30px rgba(255,50,100,0.6);
+        }
 
         #instructions {
             position: absolute; bottom: 30px; left: 0; width: 100%;
-            text-align: center; color: rgba(255, 255, 255, 0.85); font-size: 0.9rem; z-index: 10;
+            text-align: center; color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; z-index: 10;
             letter-spacing: 3px; text-transform: uppercase; pointer-events: none;
             text-shadow: 0 2px 15px rgba(0,0,0,0.9);
-            animation: float 4s ease-in-out infinite;
+            animation: float 5s ease-in-out infinite;
+            font-weight: 500;
         }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes float { 
+            0%, 100% { transform: translateY(0) scale(1); } 
+            50% { transform: translateY(-10px) scale(1.05); } 
+        }
 
         @media (max-width: 600px) {
-            #content-modal { padding: 25px 20px; border-radius: 30px; width: 95%; max-height: 90vh; overflow-y: auto; }
-            .carousel-container { height: 260px; }
-            .nav-btn, .close-btn { padding: 15px 10px; font-size: 0.9rem; letter-spacing: 1px; }
-            #modal-title { font-size: 1.8rem; margin-bottom: 15px; }
-            #modal-text { font-size: 1.05rem; margin-bottom: 20px; line-height: 1.5; }
-            .controls { flex-wrap: wrap; }
-            .close-btn { order: 3; min-width: 100%; margin-top: 5px; }
+            #content-modal { 
+                padding: 25px 18px; 
+                border-radius: 28px; 
+                width: 96%; 
+                max-height: 95vh; 
+                max-width: 100%;
+            }
+            .carousel-container { height: 300px; border-radius: 20px; margin-bottom: 20px; }
+            .nav-btn, .close-btn { 
+                padding: 14px 16px; 
+                font-size: 0.85rem; 
+                letter-spacing: 1px;
+                min-width: 100px;
+            }
+            #modal-title { font-size: 1.9rem; margin-bottom: 18px; }
+            #modal-text { font-size: 1.05rem; margin-bottom: 20px; line-height: 1.6; }
+            .controls { gap: 12px; }
+            .close-btn { order: 3; min-width: 100%; }
         }
     </style>
 
@@ -215,56 +271,55 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        // Aumentamos ligeramente la calidad en móviles modernos para mejor aspecto visual
         const pixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2);
-        const sphereSegments = isMobile ? 48 : 64; 
-        const starCount = isMobile ? 2000 : 4500;
+        const sphereSegments = isMobile ? 56 : 72; 
+        const starCount = isMobile ? 2500 : 5500;
 
-        // Base de datos de los planetas (Velocidades reducidas a la mitad y Emojis añadidos)
+        // Base de datos de los planetas mejorada con animaciones
         const solarSystem = [
             {
                 id: 'sun', name: "El Sol (MI SOL)",
-                color: 0xffdd44, emissive: 0xff6600, radius: 6.5, distance: 0, speed: 0.001,
+                color: 0xffdd44, emissive: 0xff6600, radius: 6.5, distance: 0, speed: 0.0005,
                 slides: [
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0026.jpg", text: "El principio de todo nuestro comienzo 🌅✨. Me llenó de vida, se puede decir que eres mi sol porque me das vida, me formas y me llenas de luz 🤍. Eres mi sol por ser parte fundamental de mi vida." },
-                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0028.jpg", text: "Hoy te doy gracias por todo 🙏, por llevarme de la mano en todo momento, por enseñarme y hacerme parte de tu vida y sí (ERES MI SOL 🌞🤍) porque te ganaste estar en el centro de mi universo." }
+                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0026.jpg", text: "El principio de todo nuestro comien[...]
+                    { image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0028.jpg", text: "Hoy te doy gracias por todo 🙏, p[...]
                 ]
             },
             {
                 id: 'mercury', name: "Mercurio · Primer Latido",
-                color: 0xbbbbbb, radius: 0.9, distance: 14, speed: 0.007,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0029.jpg", text: "Tan cerca de ti todo es más seguro 🫂, hay calor, hay ternura 🌡️ y a pesar de que se complica siempre estamos en una misma órbita 💫." }]
+                color: 0xbbbbbb, radius: 0.9, distance: 14, speed: 0.008,
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0029.jpg", text: "Tan cerca de ti todo es más s[...]
             },
             {
                 id: 'venus', name: "Venus · Brillo Eterno",
                 color: 0xe6b856, radius: 1.2, distance: 20, speed: 0.006,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0046.jpg", text: "Eres tan necesaria para mi vida y existencia que a veces dejo de pensar en la mía 👩‍❤️‍👨. Somos dos cuerpos similares en nuestros deseos y quiero acompañarte en cada uno de ellos 🌠🤍." }]
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20241103-WA0046.jpg", text: "Eres tan necesaria para mi vid[...]
             },
             {
                 id: 'earth', name: "Nuestro Mundo",
                 color: 0x2288ff, emissive: 0x002244, radius: 1.4, distance: 27, speed: 0.005,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20250105-WA0033.jpg", text: "Tú eres mi hogar 🏡, mi lugar seguro en el universo, la que me da la paz 🌍. Mi mundo contigo es mucho más seguro y siempre quiero estar contigo. Mi mundo son todos esos sueños y deseos Sami, esa bebé con tus ojitos 👨‍👩‍👧🤍y todo lo que soñamos." }]
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/953dcc199f34230a785f8d068ecfd82019c04679/IMG-20250105-WA0033.jpg", text: "Tú eres mi hogar 🏡, mi lug[...]
             },
             {
                 id: 'mars', name: "Marte · Pasión Ardiente",
                 color: 0xd84c3c, radius: 1.1, distance: 35, speed: 0.004,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0018.jpg", text: "Cruzaría desiertos enteros solo para estar a tu lado 🏜️🚶‍♂️. Es verdad que a veces se complican las cosas, pero de eso se trata el amor: de no importar si tengo que hacer mi camino más difícil para que el tuyo sea más sencillo ❤️‍🔥." }]
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0018.jpg", text: "Cruzaría desiertos enteros so[...]
             },
             {
                 id: 'jupiter', name: "Júpiter · Gigante de Amor",
                 color: 0xd8a27a, radius: 3.2, distance: 49, speed: 0.003,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0053.jpg", text: "Mi amor por ti es tan inmenso como el planeta más grande, en cantidades descomunales 🪐🌌. Hoy es un día donde debo dar GRACIAS 🙌, gracias porque estás en mi mundo, gracias porque te tengo 🥰." }]
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0053.jpg", text: "Mi amor por ti es tan inmenso [...]
             },
             {
                 id: 'saturn', name: "Saturno · Joya Anillada",
                 color: 0xc0a06e, radius: 2.7, distance: 67, speed: 0.0025, hasRings: true,
-                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0060.jpg", text: "Eres mi joya más preciada 💍, rodeada de belleza sin fin ✨🪐🤍." }]
+                slides: [{ image: "https://raw.githubusercontent.com/kaddexomg/TE-AMO-SAMI/f46e5107839a5b05ae28322c8bef303108a62f5c/IMG-20241103-WA0060.jpg", text: "Eres mi joya más preciada ���[...]
             }
         ];
 
         let scene, camera, renderer, controls, raycaster;
         let planets = [];
-        let interactables = []; // Cajas de colisión (Hitboxes)
+        let interactables = [];
         let isTransitioning = false;
         let activePlanet = null;
         let currentSlide = 0;
@@ -274,7 +329,7 @@
         function init() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x000003);
-            scene.fog = new THREE.FogExp2(0x000003, 0.004); 
+            scene.fog = new THREE.FogExp2(0x000003, 0.0035); 
 
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
             camera.position.copy(initialCamPos);
@@ -283,26 +338,28 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(pixelRatio);
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.3;
+            renderer.toneMappingExposure = 1.4;
             document.getElementById('webgl-container').appendChild(renderer.domElement);
 
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.06; // Suavidad de cámara
+            controls.dampingFactor = 0.08;
             controls.rotateSpeed = 0.8;
             controls.maxDistance = 160;
             controls.minDistance = 12;
             controls.enablePan = false;
             controls.maxPolarAngle = Math.PI / 1.7;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
 
-            // Iluminación realista
-            const ambient = new THREE.AmbientLight(0x1a1a2e, 0.4);
+            // Iluminación mejorada
+            const ambient = new THREE.AmbientLight(0x1a1a2e, 0.5);
             scene.add(ambient);
 
-            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x0a0a1a, 0.5);
+            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x0a0a1a, 0.6);
             scene.add(hemiLight);
 
-            const sunLight = new THREE.PointLight(0xffeedd, 3.5, 500);
+            const sunLight = new THREE.PointLight(0xffeedd, 4, 600);
             scene.add(sunLight);
 
             createUniverseSandboxEffects();
@@ -322,39 +379,64 @@
         }
 
         function createUniverseSandboxEffects() {
-            // Estrellas de fondo
+            // Estrellas mejoradas
             const starsGeo = new THREE.BufferGeometry();
             const positions = new Float32Array(starCount * 3);
             const sizes = new Float32Array(starCount);
+            const colors = new Float32Array(starCount * 3);
+            
             for (let i = 0; i < starCount; i++) {
-                const r = 250 + Math.random() * 600;
+                const r = 250 + Math.random() * 650;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
                 positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
                 positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
                 positions[i*3+2] = r * Math.cos(phi);
-                sizes[i] = Math.random() * 2.5;
+                sizes[i] = Math.random() * 3;
+                
+                // Variación de color para estrellas
+                const colorVar = Math.random();
+                if (colorVar < 0.3) { // Azules
+                    colors[i*3] = 0.5; colors[i*3+1] = 0.7; colors[i*3+2] = 1;
+                } else if (colorVar < 0.6) { // Blancas
+                    colors[i*3] = 1; colors[i*3+1] = 1; colors[i*3+2] = 1;
+                } else { // Doradas
+                    colors[i*3] = 1; colors[i*3+1] = 0.8; colors[i*3+2] = 0.3;
+                }
             }
             starsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             starsGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-            const starMat = new THREE.PointsMaterial({ color: 0xffffff, transparent: true, opacity: 0.9, sizeAttenuation: true });
+            starsGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            const starMat = new THREE.PointsMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, sizeAttenuation: true, vertexColors: true });
             stars = new THREE.Points(starsGeo, starMat);
             scene.add(stars);
 
-            // Polvo Cósmico (Nebulosa sutil)
+            // Nebulosa mejorada
             const dustGeo = new THREE.BufferGeometry();
-            const dustCount = 800;
+            const dustCount = 1200;
             const dustPos = new Float32Array(dustCount * 3);
+            const dustCol = new Float32Array(dustCount * 3);
+            
             for (let i = 0; i < dustCount; i++) {
-                const r = 20 + Math.random() * 120;
+                const r = 15 + Math.random() * 140;
                 const theta = Math.random() * Math.PI * 2;
-                const phi = Math.random() * Math.PI - Math.PI / 2; // Más plano como un disco
+                const phi = Math.random() * Math.PI - Math.PI / 2;
                 dustPos[i*3] = r * Math.cos(theta);
-                dustPos[i*3+1] = (Math.random() - 0.5) * 15; // Variación vertical
+                dustPos[i*3+1] = (Math.random() - 0.5) * 20;
                 dustPos[i*3+2] = r * Math.sin(theta);
+                
+                // Gradiente de color nebulosa
+                const pct = (i / dustCount);
+                dustCol[i*3] = 0.5 + Math.sin(pct * Math.PI) * 0.3; // Rojo
+                dustCol[i*3+1] = 0.3 + Math.cos(pct * Math.PI) * 0.3; // Verde
+                dustCol[i*3+2] = 0.8; // Azul
             }
             dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-            const dustMat = new THREE.PointsMaterial({ color: 0x88bbff, size: 0.6, transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending });
+            dustGeo.setAttribute('color', new THREE.BufferAttribute(dustCol, 3));
+            const dustMat = new THREE.PointsMaterial({ 
+                size: 0.8, transparent: true, opacity: 0.4, 
+                blending: THREE.AdditiveBlending, vertexColors: true
+            });
             cosmicDust = new THREE.Points(dustGeo, dustMat);
             scene.add(cosmicDust);
         }
@@ -366,50 +448,77 @@
             solarSystem.forEach(data => {
                 const group = new THREE.Group();
                 
-                // Material del planeta
+                // Material del planeta mejorado
                 const material = new THREE.MeshStandardMaterial({
                     map: data.id !== 'sun' ? planetTex : null,
                     color: data.color,
                     emissive: data.emissive || 0x000000,
-                    emissiveIntensity: data.id === 'sun' ? 2 : 0.05,
-                    roughness: 0.8,
-                    metalness: 0.1
+                    emissiveIntensity: data.id === 'sun' ? 2.5 : 0.1,
+                    roughness: 0.7,
+                    metalness: 0.15
                 });
 
                 const geo = new THREE.SphereGeometry(data.radius, sphereSegments, sphereSegments);
                 const mesh = new THREE.Mesh(geo, material);
                 group.add(mesh);
 
-                // Hitbox invisible más grande (Facilita el toque táctil en móviles)
-                const hitboxGeo = new THREE.SphereGeometry(data.radius * 1.8, 16, 16);
+                // Hitbox mejorado
+                const hitboxGeo = new THREE.SphereGeometry(data.radius * 2, 16, 16);
                 const hitboxMat = new THREE.MeshBasicMaterial({ visible: false });
                 const hitbox = new THREE.Mesh(hitboxGeo, hitboxMat);
-                hitbox.userData.parentGroup = group; // Referencia al grupo
+                hitbox.userData.parentGroup = group;
                 group.add(hitbox);
-                interactables.push(hitbox); // Raycaster solo verifica el hitbox
+                interactables.push(hitbox);
 
-                // Atmósferas volumétricas / Resplandor
+                // Atmósferas volumétricas mejoradas
                 if (data.id === 'sun') {
-                    // Corona interior
-                    const coronaMat1 = new THREE.MeshBasicMaterial({ color: 0xff9900, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
-                    const corona1 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.2, 32, 32), coronaMat1);
+                    // Corona interior dinámica
+                    const coronaMat1 = new THREE.MeshBasicMaterial({ 
+                        color: 0xff9900, transparent: true, opacity: 0.5, 
+                        blending: THREE.AdditiveBlending 
+                    });
+                    const corona1 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.3, 40, 40), coronaMat1);
+                    
                     // Corona exterior
-                    const coronaMat2 = new THREE.MeshBasicMaterial({ color: 0xff5500, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending });
-                    const corona2 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.6, 32, 32), coronaMat2);
-                    group.add(corona1, corona2);
+                    const coronaMat2 = new THREE.MeshBasicMaterial({ 
+                        color: 0xff5500, transparent: true, opacity: 0.25, 
+                        blending: THREE.AdditiveBlending 
+                    });
+                    const corona2 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.8, 40, 40), coronaMat2);
+                    
+                    // Corona distante
+                    const coronaMat3 = new THREE.MeshBasicMaterial({ 
+                        color: 0xffaa00, transparent: true, opacity: 0.12, 
+                        blending: THREE.AdditiveBlending 
+                    });
+                    const corona3 = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 2.4, 40, 40), coronaMat3);
+                    
+                    group.add(corona1, corona2, corona3);
                     group.userData.isSun = true;
-                    group.userData.coronas = [corona1, corona2];
+                    group.userData.coronas = [corona1, corona2, corona3];
                 } else {
-                    // Atmósfera sutil para planetas
-                    const atmosMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending });
-                    const atmos = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.08, 32, 32), atmosMat);
+                    // Atmósfera envolvente mejorada
+                    const atmosMat = new THREE.MeshBasicMaterial({ 
+                        color: data.color, transparent: true, opacity: 0.2, 
+                        blending: THREE.AdditiveBlending 
+                    });
+                    const atmos = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.12, 40, 40), atmosMat);
                     group.add(atmos);
+                    
+                    // Resplandor adicional
+                    const glowMat = new THREE.MeshBasicMaterial({ 
+                        color: data.color, transparent: true, opacity: 0.08, 
+                        blending: THREE.AdditiveBlending 
+                    });
+                    const glow = new THREE.Mesh(new THREE.SphereGeometry(data.radius * 1.25, 32, 32), glowMat);
+                    group.add(glow);
                 }
 
                 if (data.hasRings) {
-                    const ringGeo = new THREE.RingGeometry(data.radius * 1.4, data.radius * 2.4, 64);
+                    const ringGeo = new THREE.RingGeometry(data.radius * 1.5, data.radius * 2.5, 80);
                     const ringMat = new THREE.MeshStandardMaterial({
-                        color: 0xddccaa, side: THREE.DoubleSide, transparent: true, opacity: 0.8, roughness: 0.6
+                        color: 0xddccaa, side: THREE.DoubleSide, transparent: true, 
+                        opacity: 0.85, roughness: 0.5, metalness: 0.1
                     });
                     const ring = new THREE.Mesh(ringGeo, ringMat);
                     ring.rotation.x = Math.PI / 2.1;
@@ -425,25 +534,31 @@
                 planets.push(group);
             });
 
-            // Órbitas sutiles tipo Universe Sandbox
+            // Órbitas mejoradas
             planets.forEach(p => {
                 if (p.userData.distance > 0) {
                     const points = [];
-                    for (let i = 0; i <= 128; i++) {
-                        const angle = (i / 128) * Math.PI * 2;
-                        points.push(new THREE.Vector3(Math.cos(angle) * p.userData.distance, 0, Math.sin(angle) * p.userData.distance));
+                    for (let i = 0; i <= 256; i++) {
+                        const angle = (i / 256) * Math.PI * 2;
+                        points.push(new THREE.Vector3(
+                            Math.cos(angle) * p.userData.distance, 
+                            0, 
+                            Math.sin(angle) * p.userData.distance
+                        ));
                     }
-                    const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08 });
+                    const material = new THREE.LineBasicMaterial({ 
+                        color: 0xffffff, transparent: true, opacity: 0.12, 
+                        linewidth: 2 
+                    });
                     scene.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(points), material));
                 }
             });
         }
 
-        // Lógica de Toque Avanzada (Diferencia Tap vs Swipe)
         function setupTouchInteractions() {
             let startPos = new THREE.Vector2();
             let isDragging = false;
-            const dragThreshold = 5; // Píxeles de tolerancia
+            const dragThreshold = 8;
 
             const getEventCoords = (e) => {
                 if (e.changedTouches) {
@@ -468,7 +583,7 @@
 
             window.addEventListener('pointerup', (e) => {
                 if (e.target.tagName === 'BUTTON' || e.target.closest('#content-modal')) return;
-                if (isDragging || isTransitioning || activePlanet) return; // Si arrastró, no es un clic.
+                if (isDragging || isTransitioning || activePlanet) return;
 
                 const coords = getEventCoords(e);
                 const rect = renderer.domElement.getBoundingClientRect();
@@ -479,7 +594,6 @@
                 const hits = raycaster.intersectObjects(interactables);
                 
                 if (hits.length > 0) {
-                    // Accedemos al grupo padre a través del userData del hitbox
                     selectPlanet(hits[0].object.userData.parentGroup);
                 }
             });
@@ -491,7 +605,7 @@
             isTransitioning = true;
             
             const data = planet.userData;
-            const offset = data.radius * 3.2 + 4; 
+            const offset = data.radius * 3.5 + 5; 
             window.targetCam = planet.position.clone().add(new THREE.Vector3(offset, offset/2.5, offset));
             window.targetLook = planet.position.clone();
             
@@ -506,6 +620,7 @@
             window.targetCam = initialCamPos.clone();
             window.targetLook = new THREE.Vector3(0, 0, 0);
             document.getElementById('content-modal').classList.remove('active');
+            controls.autoRotate = true;
         }
 
         function updateModal() {
@@ -515,7 +630,7 @@
             document.getElementById('modal-title').innerText = data.name;
             
             const textEl = document.getElementById('modal-text');
-            textEl.style.animation = 'none'; textEl.offsetHeight; textEl.style.animation = null;
+            textEl.style.animation = 'none'; textEl.offsetHeight; textEl.style.animation = 'fadeInUp 0.6s ease-out';
             textEl.innerText = slide.text;
             
             const img = document.getElementById('carousel-image');
@@ -523,11 +638,10 @@
             
             img.style.opacity = 0; bgImg.style.opacity = 0;
             
-            // Tiempo de carga ultra rápido para respuesta ágil
             setTimeout(() => {
                 img.src = slide.image; bgImg.src = slide.image;
                 img.style.opacity = 1; bgImg.style.opacity = 1;
-            }, 50);
+            }, 80);
 
             document.getElementById('prev-btn').style.display = data.slides.length > 1 ? 'block' : 'none';
             document.getElementById('next-btn').style.display = data.slides.length > 1 ? 'block' : 'none';
@@ -557,33 +671,49 @@
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
-            if(stars) stars.rotation.y = time * 0.005;
-            if(cosmicDust) cosmicDust.rotation.y = time * 0.015;
+            // Rotación de estrellas suave
+            if(stars) {
+                stars.rotation.y = time * 0.003;
+                // Efecto de parpadeo sutil en estrellas
+                stars.material.opacity = 0.8 + Math.sin(time * 0.5) * 0.15;
+            }
+            
+            // Rotación dinámica de polvo cósmico
+            if(cosmicDust) {
+                cosmicDust.rotation.y = time * 0.012;
+                cosmicDust.rotation.z = time * 0.008;
+            }
 
             planets.forEach(p => {
-                // Rotación suave del planeta (reducida para realismo)
-                p.rotation.y += delta * 0.15;
+                // Rotación planetaria suave y natural
+                p.rotation.y += delta * (0.12 + Math.sin(time * 0.5) * 0.05);
+                p.rotation.x += delta * (0.02 + Math.cos(time * 0.7) * 0.02);
 
                 if (p.userData.isSun) {
-                    p.userData.coronas[0].scale.setScalar(1 + Math.sin(time * 2) * 0.03);
-                    p.userData.coronas[1].scale.setScalar(1 + Math.sin(time * 1.5) * 0.05);
+                    // Animaciones solares mejoradas
+                    const pulseFactor = 1 + Math.sin(time * 1.5) * 0.05;
+                    p.userData.coronas[0].scale.setScalar(pulseFactor);
+                    p.userData.coronas[1].scale.setScalar(pulseFactor * 1.1 + Math.cos(time * 2) * 0.08);
+                    p.userData.coronas[2].scale.setScalar(pulseFactor * 1.2 + Math.sin(time * 1.2) * 0.1);
                 }
 
                 if (!activePlanet) {
                     if (p.userData.distance > 0) {
-                        p.userData.angle += p.userData.speed;
+                        // Órbita suave con pequeñas variaciones
+                        p.userData.angle += p.userData.speed * (1 + Math.sin(time * 0.3) * 0.1);
                         p.position.x = Math.cos(p.userData.angle) * p.userData.distance;
                         p.position.z = Math.sin(p.userData.angle) * p.userData.distance;
                     }
-                    p.position.y = Math.sin(time * 0.5 + p.userData.angle) * 0.6;
+                    // Movimiento vertical sutil con amortiguamiento
+                    p.position.y = Math.sin(time * 0.4 + p.userData.angle) * 0.8 + Math.cos(time * 0.2) * 0.3;
                 }
             });
 
-            // Transición veloz y fluida (0.12 = más rápido)
+            // Transición de cámara suave y fluida
             if (isTransitioning && window.targetCam) {
-                camera.position.lerp(window.targetCam, 0.12);
-                controls.target.lerp(window.targetLook, 0.12);
-                if (camera.position.distanceTo(window.targetCam) < 0.2) isTransitioning = false;
+                camera.position.lerp(window.targetCam, 0.14);
+                controls.target.lerp(window.targetLook, 0.14);
+                if (camera.position.distanceTo(window.targetCam) < 0.15) isTransitioning = false;
             }
 
             controls.update();
@@ -599,4 +729,4 @@
         init();
     </script>
 </body>
-</html>```
+</html>
